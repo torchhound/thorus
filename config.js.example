@@ -1,8 +1,8 @@
 module.exports = () => {
   return {
     region: "",
-	tableName: "",
-	dynamoResource: "",
-	postBucket: ""
+    tableName: "",
+    dynamoResource: "",
+    postBucket: ""
   }
 }

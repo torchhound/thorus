@@ -28,11 +28,19 @@ provider:
       Resource: ${file(./config.js):dynamoResource}
 
 functions:
-  create:
-    handler: createThread.main
+  createThread:
+    handler: ./endpoints/createThread.main
     events:
       - http:
           path: thorus/create/thread
           method: post
+          cors: true
+          authorizer: aws_iam
+  getAllThreads:
+    handler: ./endpoints/getAllThreads.main
+    events:
+      - http:
+          path: thorus/read/all
+          method: get
           cors: true
           authorizer: aws_iam
