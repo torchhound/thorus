@@ -10,9 +10,10 @@ custom:
 
 provider:
   name: aws
+  custom: ${file(./config.js)}
   runtime: nodejs6.10
   stage: prod
-  region: us-east-2
+  region: ${file(./config.js):region}
 
   iamRoleStatements:
     - Effect: Allow
@@ -24,14 +25,14 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:us-east-2:046824255184:table/threadList"
+      Resource: ${file(./config.js):dynamoResource}
 
 functions:
   create:
     handler: createThread.main
     events:
       - http:
-          path: thorus/create
+          path: thorus/create/thread
           method: post
           cors: true
           authorizer: aws_iam
