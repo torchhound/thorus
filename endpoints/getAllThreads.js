@@ -9,7 +9,7 @@ export async function main(event, context, callback) {
     TableName: config.tableName,
     KeyConditionExpression: "threadId >= :threadId",
     ExpressionAttributeValues: {
-      ":threadId": moment().subtract(7, 'days').unix();
+      ":threadId": moment().subtract(7, 'days').valueOf();
     }
   };
 

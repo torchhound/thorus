@@ -29,7 +29,7 @@ export function main(event, context, callback) {
     const params = {
         TableName: config.tableName,
         Thread: {
-            threadId: moment().unix(),
+            threadId: moment().valueOf(),
             threadTitle: data.threadTitle,
             posts: [initialPostId]
         }
