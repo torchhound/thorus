@@ -1,6 +1,6 @@
-import * as dynamoTools from "./tools/dynamoTools";
+import * as dynamoTools from "../tools/dynamoTools";
 import moment from "moment";
-import { success, failure } from "./tools/responseTools";
+import { success, failure } from "../tools/responseTools";
 
 const config = require('./config');
 
