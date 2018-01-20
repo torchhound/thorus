@@ -1,3 +1,3 @@
 {
-	"body": "{\"threadId\":\"1516400993114579075\",\"threadTitle\":\"test\",\"posts\":\"[21e23f55-232c-4b1f-a3f4-87aa9fabd3fd]\"}"
+	"body": "{\"threadId\":\"1516400993114579075\",\"threadTitle\":\"test\",\"posts\":\"[{\"body\": \"{\"postId\":\"11111111\",\"postBody\":\"test post body\",\"imageUrl\":\"s3.amazonaws.com\"}\"}]\"}"
 }
