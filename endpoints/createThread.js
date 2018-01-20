@@ -3,7 +3,12 @@ import AWS from "aws-sdk";
 import * as dynamoTools from "../tools/dynamoTools";
 import { success, failure } from "../tools/responseTools";
 
-const config = require('../config');
+var fs = require('fs');
+var config;
+fs.readFile('file', 'utf8', function (err, data) {
+  if (err) throw err;
+  config = JSON.parse(data);
+});
 AWS.config.update({ region: config.region });
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const s3 = new AWS.S3({ region: config.region });

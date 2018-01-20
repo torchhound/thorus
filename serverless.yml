@@ -10,22 +10,17 @@ custom:
 
 provider:
   name: aws
-  custom: ${file(./config.js)}
-  runtime: nodejs9.3.0
+  runtime: nodejs6.10
   stage: prod
-  region: custom.exports.region
+  region: ${file(./config.json):region}
 
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:DescribeTable
         - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
         - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: custom.exports.dynamoResource
+      Resource: ${file(./config.json):dynamoResource}
 
 functions:
   createThread:

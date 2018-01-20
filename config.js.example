@@ -1,7 +1,0 @@
-module.exports = () => {
-  return {
-    region: "",
-    tableName: "",
-    dynamoResource: ""
-  }
-}
