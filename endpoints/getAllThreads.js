@@ -2,14 +2,14 @@ import * as dynamoTools from "../tools/dynamoTools";
 import moment from "moment";
 import { success, failure } from "../tools/responseTools";
 
-const config = require('./config');
+const config = require('../config');
 
 export async function main(event, context, callback) {
   const params = {
     TableName: config.tableName,
     KeyConditionExpression: "threadId >= :threadId",
     ExpressionAttributeValues: {
-      ":threadId": moment().subtract(7, 'days').valueOf();
+      ":threadId": moment().subtract(7, 'days').valueOf()
     }
   };
 
