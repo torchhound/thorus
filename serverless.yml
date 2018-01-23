@@ -10,6 +10,10 @@ custom:
 
 provider:
   name: aws
+  apiKeys:
+    - prodKey
+    - ${opt:stage}-prodKey
+    - ${file(./config.json):apiKey} #Clients connecting to this Rest API will then need to set any of these API keys values in the x-api-key header of their request.
   runtime: nodejs6.10
   stage: prod
   region: ${file(./config.json):region}
@@ -30,7 +34,7 @@ functions:
           path: thorus/create/thread
           method: post
           cors: true
-          authorizer: aws_iam
+          private: true
   getAllThreads:
     handler: ./endpoints/getAllThreads.main
     events:
@@ -38,4 +42,4 @@ functions:
           path: thorus/read/all
           method: get
           cors: true
-          authorizer: aws_iam
+          private: true

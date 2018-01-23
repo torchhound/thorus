@@ -1,5 +1,6 @@
 {
   "region": "example-region",
   "tableName": "exampleTable",
-  "dynamoResource": "arn:aws:dynamodb:example-region:000000:table/exampleTable" 
+  "dynamoResource": "arn:aws:dynamodb:example-region:000000:table/exampleTable", 
+  "apiKey": "EXAMPLE_API_KEY"
 }
