@@ -12,7 +12,7 @@ provider:
   name: aws
   apiKeys:
     - prodKey
-    - ${opt:stage}-prodKey
+    - ${self:provider.stage}-prodKey
     - ${file(./config.json):apiKey} #Clients connecting to this Rest API will then need to set any of these API keys values in the x-api-key header of their request.
   runtime: nodejs6.10
   stage: prod
@@ -28,7 +28,7 @@ provider:
 
 functions:
   createThread:
-    handler: ./endpoints/createThread.main
+    handler: handler.createThread
     events:
       - http:
           path: thorus/create/thread
@@ -36,10 +36,14 @@ functions:
           cors: true
           private: true
   getAllThreads:
-    handler: ./endpoints/getAllThreads.main
+    handler: handler.getAllThreads
     events:
       - http:
-          path: thorus/read/all
+          path: thorus/read/{days}
           method: get
+          request:
+            parameters:
+              paths:
+                days: true
           cors: true
           private: true
