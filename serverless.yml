@@ -47,3 +47,15 @@ functions:
                 days: true
           cors: true
           private: true
+  createPost:
+    handler: handler.createPost
+    events:
+      - http:
+          path: thorus/create/{thread}
+          method: post
+          request:
+            parameters:
+              paths:
+                thread: true
+          cors: true
+          private: true

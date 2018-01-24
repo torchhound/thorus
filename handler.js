@@ -9,7 +9,6 @@ import config from "./config.json"
 export function createThread(event, context, callback) {
     AWS.config.update({ region: config.region });
     const dynamoDb = new AWS.DynamoDB.DocumentClient();
-    const s3 = new AWS.S3({ region: config.region });
 
     const data = JSON.parse(event.body);
 
@@ -30,7 +29,7 @@ export function createThread(event, context, callback) {
     })
 }
 
-export async function getAllThreads(event, context, callback) {
+export function getAllThreads(event, context, callback) {
     AWS.config.update({ region: config.region });
     const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
@@ -45,6 +44,28 @@ export async function getAllThreads(event, context, callback) {
 
     try {
         const result = await dynamoTools.call("query", params);
+        callback(null, success(result.Item));
+    } catch (e) {
+        callback(null, failure({ status: false }));
+    }
+}
+
+export function createPost(event, context, callback) {
+    AWS.config.update({ region: config.region });
+    const dynamoDb = new AWS.DynamoDB.DocumentClient();
+
+    const threadId = event.pathParameters.thread;
+    const params = {
+        TableName: config.tableName,
+        Key: { "threadId": threadId },
+        UpdateExpression: "ADD #posts :post", //SET list_append?
+        ExpressionAttributeNames: { "#posts": "posts" },
+        ExpressionAttributeValues: { ":post": dynamoDb.createSet([event.body]) }
+        //ReturnValues:"UPDATED_NEW"
+    };
+
+    try {
+        const result = await dynamoTools.call("update", params);
         callback(null, success(result.Item));
     } catch (e) {
         callback(null, failure({ status: false }));
