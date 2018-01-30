@@ -6,7 +6,7 @@ import * as dynamoTools from "./tools/dynamoTools";
 import { success, failure } from "./tools/responseTools";
 import config from "./config.json"
 
-export function createThread(event, context, callback) {
+export async function createThread(event, context, callback) {
     AWS.config.update({ region: config.region });
     const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
@@ -21,15 +21,15 @@ export function createThread(event, context, callback) {
         }
     };
 
-    var putDbPromise = dynamoTools.call("put", dbParams);
-    putDbPromise.then(function(data) {
-        callback(null, success(params.Item));
-    }).catch(function(err) {
+    try {
+        const result = await dynamoTools.call("put", params);
+        callback(null, success(result.Item));
+    } catch (e) {
         callback(null, failure({ status: false }));
-    })
+    }
 }
 
-export function getAllThreads(event, context, callback) {
+export async function getAllThreads(event, context, callback) {
     AWS.config.update({ region: config.region });
     const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
@@ -50,7 +50,7 @@ export function getAllThreads(event, context, callback) {
     }
 }
 
-export function createPost(event, context, callback) {
+export async function createPost(event, context, callback) {
     AWS.config.update({ region: config.region });
     const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
@@ -67,6 +67,38 @@ export function createPost(event, context, callback) {
     try {
         const result = await dynamoTools.call("update", params);
         callback(null, success(result.Item));
+    } catch (e) {
+        callback(null, failure({ status: false }));
+    }
+}
+
+export async function scheduledDelete(event, context, callback) {
+    AWS.config.update({ region: config.region });
+    const dynamoDb = new AWS.DynamoDB.DocumentClient();
+
+    const time = moment().subtract(30, 'days').valueOf()
+    const queryParams = {
+        TableName: config.tableName,
+        KeyConditionExpression: "threadId >= :threadId",
+        ExpressionAttributeValues: {
+            ":threadId": time
+        }
+    };
+
+    try {
+        let queryArray = [];
+        const queryResult = await dynamoTools.call("query", queryParams);
+        for (let i = queryResult.Item.length - 1; i >= 0; i--) {
+            queryArray.push(queryResult.Item[i].threadId); //turn into json DeleteRequest
+        }
+        const deleteParams = {
+            TableName: config.tableName,
+            RequestItems : {
+                'Bag' : queryArray
+            }
+        };
+        const deleteResult = await dynamoTools.call("batchWrite", deleteParams);
+        callback(null, success(deleteResult.Item));
     } catch (e) {
         callback(null, failure({ status: false }));
     }

@@ -59,3 +59,7 @@ functions:
                 thread: true
           cors: true
           private: true
+  scheduledDelete:
+    handler: handler.scheduledDelete
+    events:
+      - schedule: rate(7 days)
