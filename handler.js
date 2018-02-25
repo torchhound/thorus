@@ -1,5 +1,6 @@
 import moment from "moment";
-import AWS from "aws-sdk";
+import "aws-sdk/dist/aws-sdk";
+const AWS = window.AWS;
 import path from "path";
 import fs from "fs";
 import * as dynamoTools from "./tools/dynamoTools";
@@ -25,6 +26,7 @@ export async function createThread(event, context, callback) {
         const result = await dynamoTools.call("put", params);
         callback(null, success(result.Item));
     } catch (e) {
+        console.log(e);
         callback(null, failure({ status: false }));
     }
 }

@@ -10,6 +10,7 @@ module.exports = {
   externals: [nodeExternals()],
   // Run babel on all .js files and skip those in node_modules
   module: {
+    noParse: [/aws\-sdk/],
     rules: [
       {
         test: /\.js$/,

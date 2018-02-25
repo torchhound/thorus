@@ -1,3 +1,5 @@
 {
-	"body": "{\"threadId\":\"1516400993114579075\",\"threadTitle\":\"test\",\"posts\":\"[{\"body\": \"{\"postId\":\"11111111\",\"postBody\":\"test post body\",\"imageUrl\":\"s3.amazonaws.com\"}\"}]\"}"
+	"threadId": "",
+	"threadTitle": "test title",
+	"posts": [{"postId": "0", "postBody": "test body", "imageUrl": "fictional.s3.com/test"}]
 }
