@@ -8,11 +8,12 @@ export function failure(body) {
 
 function buildResponse(statusCode, body) {
   return {
-    "body": JSON.stringify(body),
+    "statusCode": statusCode,
     "headers": {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": true
     },
-    "statusCode": statusCode
+    "body": JSON.stringify(body),
+    "isBase64Encoded": false
   };
 }

@@ -1,6 +1,5 @@
 import moment from "moment";
-import "aws-sdk/dist/aws-sdk";
-const AWS = window.AWS;
+import AWS from "aws-sdk/global";
 import path from "path";
 import fs from "fs";
 import * as dynamoTools from "./tools/dynamoTools";
@@ -13,9 +12,10 @@ export async function createThread(event, context, callback) {
 
     const data = JSON.parse(event.body);
 
-    const dbParams = {
+    const putParams = {
         TableName: config.tableName,
-        Thread: {
+        Item: {
+            anonId: data.anonId,
             threadId: moment().valueOf(),
             threadTitle: data.threadTitle,
             posts: data.posts
@@ -23,8 +23,8 @@ export async function createThread(event, context, callback) {
     };
 
     try {
-        const result = await dynamoTools.call("put", params);
-        callback(null, success(result.Item));
+        const result = await dynamoTools.call("put", putParams);
+        callback(null, success({ status: true}));
     } catch (e) {
         console.log(e);
         callback(null, failure({ status: false }));
@@ -35,19 +35,20 @@ export async function getAllThreads(event, context, callback) {
     AWS.config.update({ region: config.region });
     const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-    const time = moment().subtract(event.pathParameters.days, 'days').valueOf()
-    const params = {
+    const readParams = {
         TableName: config.tableName,
-        KeyConditionExpression: "threadId >= :threadId",
+        KeyConditionExpression: "anonId = :id and threadId >= :timeStamp",
         ExpressionAttributeValues: {
-            ":threadId": time
+            ":id": parseInt(event.pathParameters.id),
+            ":timeStamp": moment().subtract(event.pathParameters.days, 'days').valueOf()
         }
     };
 
     try {
-        const result = await dynamoTools.call("query", params);
-        callback(null, success(result.Item));
+        const result = await dynamoTools.call("query", readParams);
+        callback(null, success(result));
     } catch (e) {
+        console.log(e);
         callback(null, failure({ status: false }));
     }
 }
@@ -70,6 +71,7 @@ export async function createPost(event, context, callback) {
         const result = await dynamoTools.call("update", params);
         callback(null, success(result.Item));
     } catch (e) {
+        console.log(e);
         callback(null, failure({ status: false }));
     }
 }
@@ -99,9 +101,10 @@ export async function scheduledDelete(event, context, callback) {
                 'Bag' : queryArray
             }
         };
-        const deleteResult = await dynamoTools.call("batchWrite", deleteParams);
-        callback(null, success(deleteResult.Item));
+        //const deleteResult = await dynamoTools.call("batchWrite", deleteParams);
+        //callback(null, success(deleteResult.Item));
     } catch (e) {
-        callback(null, failure({ status: false }));
+        console.log(e);
+        //callback(null, failure({ status: false }));
     }
 }
