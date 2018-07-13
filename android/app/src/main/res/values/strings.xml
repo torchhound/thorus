@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Thorus</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="empty_feed">No Threads</string>
+    <string name="post_title">Post Title</string>
+    <string name="post_body">Post Body</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="post">Post!</string>
+    <string name="create">Create!</string>
+</resources>

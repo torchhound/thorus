@@ -49,12 +49,8 @@ functions:
     handler: handler.createPost
     events:
       - http:
-          path: thorus/create/{thread}
+          path: thorus/create/{anon}/{thread}
           method: post
-          request:
-            parameters:
-              paths:
-                thread: true
           cors: true
           private: true
   scheduledDelete:

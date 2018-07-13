@@ -57,18 +57,21 @@ export async function createPost(event, context, callback) {
     AWS.config.update({ region: config.region });
     const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-    const threadId = event.pathParameters.thread;
-    const params = {
+    const newPost = JSON.parse(event.body);
+
+    const updateParams = {
         TableName: config.tableName,
-        Key: { "threadId": threadId },
-        UpdateExpression: "ADD #posts :post", //SET list_append?
+        Key: { "threadId": event.pathParameters.thread, "anonId": event.pathParameters.anon},
+        UpdateExpression: "SET #posts = list_append(#posts, :post)",
         ExpressionAttributeNames: { "#posts": "posts" },
-        ExpressionAttributeValues: { ":post": dynamoDb.createSet([event.body]) }
-        //ReturnValues:"UPDATED_NEW"
+        ExpressionAttributeValues: { ":post": [newPost.post] },
+        ReturnValues:"ALL_NEW"
     };
 
     try {
-        const result = await dynamoTools.call("update", params);
+        const result = await dynamoTools.call("update", updateParams);
+        console.log(result.Item);
+        console.log(result);
         callback(null, success(result.Item));
     } catch (e) {
         console.log(e);

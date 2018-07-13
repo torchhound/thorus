@@ -1,4 +1,5 @@
 {
+	"anonId": 1,
 	"threadId": "",
 	"threadTitle": "test title",
 	"posts": [{"postId": "0", "postBody": "test body", "imageUrl": "fictional.s3.com/test"}]

@@ -1,4 +1,4 @@
 {
-	"pathParameters": {"thread": "234234234234234"},
-	"body": "{\"{\"postId\":\"11111111\",\"postBody\":\"test post body\",\"imageUrl\":\"s3.amazonaws.com\"}\"}]\"}"
+	"pathParameters": {"anon": "1", "thread": "1519618890377"},
+	"post": {"postId": "222222", "postBody": "Hello Serverless", "imageUrl": "s3.amazon.com"}
 }
